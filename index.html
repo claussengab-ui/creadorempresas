@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gabiempresas — Formulario de constitución</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand">Gabiempresas <small>Formalización de empresas</small></div>
+      <div class="topbar-note" id="folioDisplay"></div>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+
+      <section class="hero" id="heroBlock">
+        <span class="folio-tag">📄 Formulario de ingreso</span>
+        <h1>Cuéntanos de tu empresa y nos encargamos del resto</h1>
+        <p>Completa estos datos y tu contadora los revisará para constituir tu empresa en la plataforma Tu Empresa en un Día e iniciar actividades ante el SII. Tómate tu tiempo, puedes tener los documentos de tus socios a la mano.</p>
+      </section>
+
+      <form id="clienteForm" novalidate>
+
+        <!-- 1. Datos de la empresa -->
+        <div class="section-card">
+          <div class="section-head">
+            <div class="section-num">1</div>
+            <div>
+              <h2>Datos de la empresa</h2>
+              <span>Lo que quedará escrito en la escritura de constitución</span>
+            </div>
+          </div>
+
+          <div class="field-grid">
+            <div class="field field--full">
+              <label>Tipo de sociedad</label>
+              <div class="radio-row" id="tipoSociedadRow">
+                <label class="radio-chip"><input type="radio" name="tipoSociedad" value="SpA" required> SpA</label>
+                <label class="radio-chip"><input type="radio" name="tipoSociedad" value="EIRL"> EIRL</label>
+                <label class="radio-chip"><input type="radio" name="tipoSociedad" value="SRL"> SRL (Ltda.)</label>
+                <label class="radio-chip"><input type="radio" name="tipoSociedad" value="SA"> S.A.</label>
+                <label class="radio-chip"><input type="radio" name="tipoSociedad" value="No sé"> No sé cuál me conviene</label>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Nombre / razón social</label>
+              <input type="text" name="nombreEmpresa" required placeholder="Ej: Comercializadora Sur SpA">
+            </div>
+            <div class="field">
+              <label>Nombre de fantasía <span class="opt">(opcional)</span></label>
+              <input type="text" name="nombreFantasia" placeholder="Ej: Sur Distribuidora">
+            </div>
+
+            <div class="field field--full">
+              <label>Giro o actividad económica</label>
+              <input type="text" name="giro" required placeholder="Ej: Venta al por mayor de productos agrícolas">
+              <p class="hint">Describe a qué se dedicará tu empresa, lo más específico posible.</p>
+            </div>
+
+            <div class="field field--full">
+              <label>Domicilio tributario (dirección de la empresa)</label>
+              <input type="text" name="domicilio" required placeholder="Calle, número, comuna, ciudad">
+            </div>
+
+            <div class="field">
+              <label>Capital inicial (CLP)</label>
+              <input type="number" name="capitalMonto" min="0" step="1000" required placeholder="Ej: 1000000">
+            </div>
+            <div class="field">
+              <label>Forma del aporte</label>
+              <select name="capitalForma" required>
+                <option value="">Selecciona…</option>
+                <option value="dinero">En dinero</option>
+                <option value="especie">En especies (bienes)</option>
+                <option value="mixto">Mixto</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>Plazo de duración de la sociedad</label>
+              <select name="plazoDuracion" required>
+                <option value="">Selecciona…</option>
+                <option value="indefinido">Indefinido</option>
+                <option value="definido">Definido (fecha de término)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>¿Contratarás trabajadores?</label>
+              <select name="tieneTrabajadores" required>
+                <option value="">Selecciona…</option>
+                <option value="si">Sí</option>
+                <option value="no">No, por ahora</option>
+                <option value="talvez">No lo sé todavía</option>
+              </select>
+            </div>
+
+            <div class="field field--full">
+              <label>Régimen tributario de preferencia <span class="opt">(si no sabes, tu contadora te asesora)</span></label>
+              <select name="regimenTributario">
+                <option value="asesoria">Que me asesoren, no sé cuál conviene</option>
+                <option value="pro_pyme_general">Pro Pyme General</option>
+                <option value="pro_pyme_transparente">Pro Pyme Transparente</option>
+                <option value="semi_integrado">Semi Integrado</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Socios -->
+        <div class="section-card">
+          <div class="section-head">
+            <div class="section-num">2</div>
+            <div>
+              <h2>Socios / dueños</h2>
+              <span>Agrega a cada persona que será socia de la empresa</span>
+            </div>
+          </div>
+
+          <div id="sociosContainer"></div>
+          <button type="button" class="btn-add" id="btnAddSocio">+ Agregar socio</button>
+        </div>
+
+        <!-- 3. Contacto -->
+        <div class="section-card">
+          <div class="section-head">
+            <div class="section-num">3</div>
+            <div>
+              <h2>Datos de contacto</h2>
+              <span>Para avisarte cómo va el proceso</span>
+            </div>
+          </div>
+          <div class="field-grid">
+            <div class="field">
+              <label>Correo de contacto</label>
+              <input type="email" name="contactoEmail" required placeholder="tucorreo@ejemplo.com">
+            </div>
+            <div class="field">
+              <label>Teléfono de contacto</label>
+              <input type="tel" name="contactoTelefono" required placeholder="+56 9 1234 5678">
+            </div>
+            <div class="field field--full">
+              <label>Comentarios adicionales <span class="opt">(opcional)</span></label>
+              <textarea name="comentarios" placeholder="Cualquier detalle que debamos saber"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="submit-row">
+          <p class="submit-note">Al enviar, tu contadora recibirá estos datos para revisarlos y comenzar la constitución.</p>
+          <button type="submit" class="btn btn-primary" id="btnSubmit">Enviar datos</button>
+        </div>
+      </form>
+
+      <!-- Confirmación -->
+      <div class="confirm" id="confirmBlock" style="display:none;">
+        <div class="stamp"><span>Recibido<br>✓</span></div>
+        <h2>¡Listo! Recibimos tus datos</h2>
+        <p>Tu contadora los revisará y se pondrá en contacto contigo para los siguientes pasos de la constitución.</p>
+        <div class="folio-tag" id="confirmFolio"></div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>Gabiempresas · Formulario privado de constitución de empresas</footer>
+</div>
+
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/form.js"></script>
+</body>
+</html>
