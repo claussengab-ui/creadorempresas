@@ -94,7 +94,6 @@ function recolectarDatos(form, folio){
 
   const empresa = {
     nombre: fd.get('nombreEmpresa') || '',
-    nombreFantasia: fd.get('nombreFantasia') || '',
     giro: fd.get('giro') || '',
     yaEjerce: fd.get('yaEjerce') || '',
     desdeCuando: fd.get('desdeCuando') || '',
@@ -103,7 +102,9 @@ function recolectarDatos(form, folio){
     capitalMonto: Number(fd.get('capitalMonto') || 0),
     capitalForma: fd.get('capitalForma') || '',
     plazoDuracion: fd.get('plazoDuracion') || '',
-    tieneTrabajadores: fd.get('tieneTrabajadores') || ''
+    tieneTrabajadores: fd.get('tieneTrabajadores') || '',
+    representanteLegal: fd.get('representanteLegal') || '',
+    representanteLegalRut: fd.get('representanteLegalRut') || ''
   };
 
   const nombres = fd.getAll('socio_nombre');
@@ -136,7 +137,6 @@ function recolectarDatos(form, folio){
     folio,
     estado: 'pendiente',
     empresa,
-    representanteLegal: fd.get('representanteLegal') || '',
     socios,
     contacto
   };

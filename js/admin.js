@@ -105,7 +105,7 @@ function coincideBusqueda(c, term){
   term = term.toLowerCase();
   const enEmpresa = (c.empresa?.nombre || '').toLowerCase().includes(term);
   const enFolio = (c.folio || '').toLowerCase().includes(term);
-  const enRepresentante = (c.representanteLegal || '').toLowerCase().includes(term);
+  const enRepresentante = (c.empresa?.representanteLegal || '').toLowerCase().includes(term);
   const enSocios = (c.socios || []).some(s => (s.nombre || '').toLowerCase().includes(term) || (s.rut || '').toLowerCase().includes(term));
   return enEmpresa || enFolio || enRepresentante || enSocios;
 }
@@ -128,7 +128,7 @@ function renderTabla(){
     <tr class="row-clickable" data-id="${c.id}">
       <td class="folio-cell">${c.folio || '—'}</td>
       <td><strong>${c.empresa?.nombre || '—'}</strong></td>
-      <td>${c.representanteLegal || '—'}</td>
+      <td>${c.empresa?.representanteLegal || '—'}</td>
       <td>${(c.socios || []).length}</td>
       <td>${formatCLP(c.empresa?.capitalMonto)}</td>
       <td>${formatFecha(c.fecha_ingreso)}</td>
@@ -192,7 +192,6 @@ function abrirModal(id){
     <div class="modal-section">
       <h4>Empresa</h4>
       <div class="kv-grid">
-        <div class="kv"><b>Nombre de fantasía</b>${e.nombreFantasia || '—'}</div>
         <div class="kv"><b>Dirección</b>${e.domicilio || '—'}</div>
         <div class="kv"><b>¿Arrendada o propia?</b>${e.tenenciaDomicilio === 'arrendada' ? 'Arrendada' : e.tenenciaDomicilio === 'propia' ? 'Propia' : e.tenenciaDomicilio === 'no_se' ? 'No lo sabe todavía' : '—'}</div>
         <div class="kv"><b>Capital inicial</b>${formatCLP(e.capitalMonto)}</div>
@@ -217,7 +216,8 @@ function abrirModal(id){
     <div class="modal-section">
       <h4>Socios (${(c.socios || []).length})</h4>
       ${sociosHtml || '<p>Sin socios registrados.</p>'}
-      <div class="kv" style="margin-top:12px;"><b>Representante legal</b>${c.representanteLegal || '—'}</div>
+      <div class="kv" style="margin-top:12px;"><b>Representante legal</b>${e.representanteLegal || '—'}</div>
+      <div class="kv"><b>RUT del representante</b>${e.representanteLegalRut || '—'}</div>
     </div>
     <div class="modal-section">
       <h4>Contacto</h4>
@@ -266,8 +266,8 @@ document.getElementById('btnExport').addEventListener('click', () => {
   if(clientesCache.length === 0) return;
 
   const headers = [
-    'Folio','Fecha','Estado','Empresa','Nombre fantasia','Que quiere hacer','Ya ejerce','Desde cuando',
-    'Tipo sociedad definido','Direccion','Arrendada o propia','Representante legal',
+    'Folio','Fecha','Estado','Empresa','Que quiere hacer','Ya ejerce','Desde cuando',
+    'Tipo sociedad definido','Direccion','Arrendada o propia','Representante legal','RUT representante',
     'Capital','Forma aporte','Plazo','Trabajadores',
     'Socio nombre','Socio RUT','Socio nacionalidad','Socio estado civil','Socio domicilio',
     'Socio email','Socio telefono','Socio participacion',
@@ -281,8 +281,8 @@ document.getElementById('btnExport').addEventListener('click', () => {
     socios.forEach(s => {
       rows.push([
         c.folio, formatFecha(c.fecha_ingreso), ESTADO_LABEL[c.estado] || c.estado,
-        e.nombre, e.nombreFantasia, e.giro, e.yaEjerce === 'si' ? 'Si' : 'No', e.desdeCuando,
-        e.tipoSociedadDefinido, e.domicilio, e.tenenciaDomicilio, c.representanteLegal,
+        e.nombre, e.giro, e.yaEjerce === 'si' ? 'Si' : 'No', e.desdeCuando,
+        e.tipoSociedadDefinido, e.domicilio, e.tenenciaDomicilio, e.representanteLegal, e.representanteLegalRut,
         e.capitalMonto, e.capitalForma, e.plazoDuracion, e.tieneTrabajadores,
         s.nombre, s.rut, s.nacionalidad, s.estadoCivil, s.domicilio, s.email, s.telefono, s.participacion,
         c.contacto?.email, c.contacto?.telefono, c.contacto?.comentarios

@@ -38,13 +38,9 @@
           </div>
 
           <div class="field-grid">
-            <div class="field">
+            <div class="field field--full">
               <label>¿Qué nombre quieres ponerle a tu empresa?</label>
               <input type="text" name="nombreEmpresa" required placeholder="Ej: Comercializadora Sur">
-            </div>
-            <div class="field">
-              <label>Nombre de fantasía <span class="opt">(opcional)</span></label>
-              <input type="text" name="nombreFantasia" placeholder="Ej: Sur Distribuidora">
             </div>
 
             <div class="field field--full">
@@ -59,7 +55,6 @@
                 <label class="radio-chip"><input type="radio" name="yaEjerce" value="si" required> Ya estoy vendiendo / trabajando en esto</label>
                 <label class="radio-chip"><input type="radio" name="yaEjerce" value="no"> Todavía no, voy a empezar</label>
               </div>
-              <p class="hint">Esto nos ayuda a saber desde cuándo declarar tus actividades ante el SII.</p>
             </div>
 
             <div class="field field--full" id="desdeCuandoField" style="display:none;">
@@ -129,10 +124,18 @@
           <div id="sociosContainer"></div>
           <button type="button" class="btn-add" id="btnAddSocio">+ Agregar socio</button>
 
-          <div class="field field--full" style="margin-top:20px;">
-            <label>¿Quién será el representante legal de la empresa?</label>
-            <input type="text" name="representanteLegal" required placeholder="Escribe el nombre de uno de los socios de arriba">
-            <p class="hint">El representante legal es la persona que firma a nombre de la empresa: hace el inicio de actividades ante el SII, abre la cuenta bancaria, y firma contratos. Si son varios socios, deben decidir juntos quién cumplirá este rol (puede ser más de una persona).</p>
+          <div class="field-grid" style="margin-top:20px;">
+            <div class="field">
+              <label>¿Quién será el representante legal de la empresa?</label>
+              <input type="text" name="representanteLegal" required placeholder="Escribe el nombre de uno de los socios de arriba">
+            </div>
+            <div class="field">
+              <label>RUT del representante legal</label>
+              <input type="text" name="representanteLegalRut" required placeholder="12.345.678-9">
+            </div>
+            <div class="field field--full">
+              <p class="hint">El representante legal es la persona que firma a nombre de la empresa: hace el inicio de actividades ante el SII, abre la cuenta bancaria, y firma contratos. Si son varios socios, deben decidir juntos quién cumplirá este rol (puede ser más de una persona).</p>
+            </div>
           </div>
         </div>
 
