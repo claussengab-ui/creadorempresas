@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('folioDisplay').textContent = folio;
     }catch(err){
       console.error(err);
-      alert('No pudimos enviar tus datos. Revisa tu conexión e intenta nuevamente.');
+      alert('No pudimos enviar tus datos.\n\nDetalle técnico: ' + (err?.message || JSON.stringify(err)));
       btnSubmit.disabled = false;
       btnSubmit.textContent = 'Enviar datos';
     }

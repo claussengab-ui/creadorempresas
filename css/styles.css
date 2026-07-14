@@ -242,8 +242,15 @@ textarea{ resize:vertical; min-height:80px; }
   cursor:pointer;
   background:var(--paper-raised);
   user-select:none;
+  position:relative;
 }
-.radio-chip input{ display:none; }
+.radio-chip input{
+  position:absolute;
+  opacity:0;
+  width:1px;
+  height:1px;
+  pointer-events:none;
+}
 .radio-chip.checked{
   border-color:var(--gold);
   background:var(--gold-soft);
