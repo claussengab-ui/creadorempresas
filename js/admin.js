@@ -22,7 +22,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
   const errorEl = document.getElementById('loginError');
   errorEl.style.display = 'none';
 
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const { error } = await sb.auth.signInWithPassword({ email, password });
   if(error){
     console.error(error);
     errorEl.textContent = 'Correo o clave incorrectos.';
@@ -33,13 +33,13 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
 });
 
 document.getElementById('btnLogout').addEventListener('click', async () => {
-  await supabase.auth.signOut();
+  await sb.auth.signOut();
   document.getElementById('loginView').style.display = 'block';
   document.getElementById('dashView').style.display = 'none';
 });
 
 async function verificarSesion(){
-  const { data } = await supabase.auth.getSession();
+  const { data } = await sb.auth.getSession();
   if(data.session){
     mostrarDashboard();
   }else{
@@ -59,7 +59,7 @@ verificarSesion();
 
 // ---------- DATA ----------
 async function cargarClientes(){
-  const { data, error } = await supabase
+  const { data, error } = await sb
     .from('clientes')
     .select('*')
     .order('fecha_ingreso', { ascending: false });
@@ -76,7 +76,7 @@ async function cargarClientes(){
 }
 
 function suscribirCambios(){
-  supabase
+  sb
     .channel('clientes-cambios')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'clientes' }, () => {
       cargarClientes();
@@ -248,7 +248,7 @@ document.getElementById('btnGuardarEstado').addEventListener('click', async () =
   const cliente = clientesCache.find(x => x.id === clienteAbiertoId);
   const empresaActualizada = { ...(cliente?.empresa || {}), tipoSociedadDefinido };
 
-  const { error } = await supabase
+  const { error } = await sb
     .from('clientes')
     .update({ estado: nuevoEstado, empresa: empresaActualizada })
     .eq('id', clienteAbiertoId);

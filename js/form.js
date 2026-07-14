@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const data = recolectarDatos(form, folio);
 
     try{
-      const { error } = await supabase.from('clientes').insert([data]);
+      const { error } = await sb.from('clientes').insert([data]);
       if(error) throw error;
       document.getElementById('heroBlock').style.display = 'none';
       form.style.display = 'none';
