@@ -105,8 +105,9 @@ function coincideBusqueda(c, term){
   term = term.toLowerCase();
   const enEmpresa = (c.empresa?.nombre || '').toLowerCase().includes(term);
   const enFolio = (c.folio || '').toLowerCase().includes(term);
+  const enRepresentante = (c.representanteLegal || '').toLowerCase().includes(term);
   const enSocios = (c.socios || []).some(s => (s.nombre || '').toLowerCase().includes(term) || (s.rut || '').toLowerCase().includes(term));
-  return enEmpresa || enFolio || enSocios;
+  return enEmpresa || enFolio || enRepresentante || enSocios;
 }
 
 function renderTabla(){
@@ -127,7 +128,7 @@ function renderTabla(){
     <tr class="row-clickable" data-id="${c.id}">
       <td class="folio-cell">${c.folio || '—'}</td>
       <td><strong>${c.empresa?.nombre || '—'}</strong></td>
-      <td>${c.empresa?.tipoSociedad || '—'}</td>
+      <td>${c.representanteLegal || '—'}</td>
       <td>${(c.socios || []).length}</td>
       <td>${formatCLP(c.empresa?.capitalMonto)}</td>
       <td>${formatFecha(c.fecha_ingreso)}</td>
@@ -181,22 +182,42 @@ function abrirModal(id){
 
   document.getElementById('modalBody').innerHTML = `
     <div class="modal-section">
+      <h4>Lo que quiere el cliente</h4>
+      <div class="kv-grid">
+        <div class="kv field--full"><b>¿Qué quiere hacer?</b>${e.giro || '—'}</div>
+        <div class="kv"><b>¿Ya está ejerciendo?</b>${e.yaEjerce === 'si' ? 'Sí' : e.yaEjerce === 'no' ? 'No, recién empieza' : '—'}</div>
+        ${e.yaEjerce === 'si' ? `<div class="kv"><b>¿Desde cuándo?</b>${e.desdeCuando || '—'}</div>` : ''}
+      </div>
+    </div>
+    <div class="modal-section">
       <h4>Empresa</h4>
       <div class="kv-grid">
-        <div class="kv"><b>Tipo de sociedad</b>${e.tipoSociedad || '—'}</div>
         <div class="kv"><b>Nombre de fantasía</b>${e.nombreFantasia || '—'}</div>
-        <div class="kv"><b>Giro</b>${e.giro || '—'}</div>
-        <div class="kv"><b>Domicilio tributario</b>${e.domicilio || '—'}</div>
+        <div class="kv"><b>Dirección</b>${e.domicilio || '—'}</div>
+        <div class="kv"><b>¿Arrendada o propia?</b>${e.tenenciaDomicilio === 'arrendada' ? 'Arrendada' : e.tenenciaDomicilio === 'propia' ? 'Propia' : e.tenenciaDomicilio === 'no_se' ? 'No lo sabe todavía' : '—'}</div>
         <div class="kv"><b>Capital inicial</b>${formatCLP(e.capitalMonto)}</div>
         <div class="kv"><b>Forma de aporte</b>${e.capitalForma || '—'}</div>
         <div class="kv"><b>Plazo de duración</b>${e.plazoDuracion || '—'}</div>
         <div class="kv"><b>¿Tendrá trabajadores?</b>${e.tieneTrabajadores || '—'}</div>
-        <div class="kv"><b>Régimen tributario preferido</b>${e.regimenTributario || '—'}</div>
+      </div>
+    </div>
+    <div class="modal-section">
+      <h4>Definición tuya (contadora)</h4>
+      <div class="field">
+        <label>Tipo de sociedad que definiste</label>
+        <select id="tipoSociedadDefinido">
+          <option value="">Sin definir</option>
+          <option value="SpA" ${e.tipoSociedadDefinido === 'SpA' ? 'selected' : ''}>SpA</option>
+          <option value="EIRL" ${e.tipoSociedadDefinido === 'EIRL' ? 'selected' : ''}>EIRL</option>
+          <option value="SRL" ${e.tipoSociedadDefinido === 'SRL' ? 'selected' : ''}>SRL (Ltda.)</option>
+          <option value="SA" ${e.tipoSociedadDefinido === 'SA' ? 'selected' : ''}>S.A.</option>
+        </select>
       </div>
     </div>
     <div class="modal-section">
       <h4>Socios (${(c.socios || []).length})</h4>
       ${sociosHtml || '<p>Sin socios registrados.</p>'}
+      <div class="kv" style="margin-top:12px;"><b>Representante legal</b>${c.representanteLegal || '—'}</div>
     </div>
     <div class="modal-section">
       <h4>Contacto</h4>
@@ -223,7 +244,15 @@ function cerrarModal(){
 document.getElementById('btnGuardarEstado').addEventListener('click', async () => {
   if(!clienteAbiertoId) return;
   const nuevoEstado = document.getElementById('estadoSelect').value;
-  const { error } = await supabase.from('clientes').update({ estado: nuevoEstado }).eq('id', clienteAbiertoId);
+  const tipoSociedadDefinido = document.getElementById('tipoSociedadDefinido').value;
+  const cliente = clientesCache.find(x => x.id === clienteAbiertoId);
+  const empresaActualizada = { ...(cliente?.empresa || {}), tipoSociedadDefinido };
+
+  const { error } = await supabase
+    .from('clientes')
+    .update({ estado: nuevoEstado, empresa: empresaActualizada })
+    .eq('id', clienteAbiertoId);
+
   if(error){
     console.error(error);
     alert('No se pudo guardar el estado.');
@@ -237,8 +266,9 @@ document.getElementById('btnExport').addEventListener('click', () => {
   if(clientesCache.length === 0) return;
 
   const headers = [
-    'Folio','Fecha','Estado','Empresa','Nombre fantasia','Tipo sociedad','Giro','Domicilio',
-    'Capital','Forma aporte','Plazo','Trabajadores','Regimen tributario',
+    'Folio','Fecha','Estado','Empresa','Nombre fantasia','Que quiere hacer','Ya ejerce','Desde cuando',
+    'Tipo sociedad definido','Direccion','Arrendada o propia','Representante legal',
+    'Capital','Forma aporte','Plazo','Trabajadores',
     'Socio nombre','Socio RUT','Socio nacionalidad','Socio estado civil','Socio domicilio',
     'Socio email','Socio telefono','Socio participacion',
     'Contacto email','Contacto telefono','Comentarios'
@@ -251,8 +281,9 @@ document.getElementById('btnExport').addEventListener('click', () => {
     socios.forEach(s => {
       rows.push([
         c.folio, formatFecha(c.fecha_ingreso), ESTADO_LABEL[c.estado] || c.estado,
-        e.nombre, e.nombreFantasia, e.tipoSociedad, e.giro, e.domicilio,
-        e.capitalMonto, e.capitalForma, e.plazoDuracion, e.tieneTrabajadores, e.regimenTributario,
+        e.nombre, e.nombreFantasia, e.giro, e.yaEjerce === 'si' ? 'Si' : 'No', e.desdeCuando,
+        e.tipoSociedadDefinido, e.domicilio, e.tenenciaDomicilio, c.representanteLegal,
+        e.capitalMonto, e.capitalForma, e.plazoDuracion, e.tieneTrabajadores,
         s.nombre, s.rut, s.nacionalidad, s.estadoCivil, s.domicilio, s.email, s.telefono, s.participacion,
         c.contacto?.email, c.contacto?.telefono, c.contacto?.comentarios
       ]);

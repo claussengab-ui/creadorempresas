@@ -93,16 +93,17 @@ function recolectarDatos(form, folio){
   const fd = new FormData(form);
 
   const empresa = {
-    tipoSociedad: fd.get('tipoSociedad') || '',
     nombre: fd.get('nombreEmpresa') || '',
     nombreFantasia: fd.get('nombreFantasia') || '',
     giro: fd.get('giro') || '',
+    yaEjerce: fd.get('yaEjerce') || '',
+    desdeCuando: fd.get('desdeCuando') || '',
     domicilio: fd.get('domicilio') || '',
+    tenenciaDomicilio: fd.get('tenenciaDomicilio') || '',
     capitalMonto: Number(fd.get('capitalMonto') || 0),
     capitalForma: fd.get('capitalForma') || '',
     plazoDuracion: fd.get('plazoDuracion') || '',
-    tieneTrabajadores: fd.get('tieneTrabajadores') || '',
-    regimenTributario: fd.get('regimenTributario') || ''
+    tieneTrabajadores: fd.get('tieneTrabajadores') || ''
   };
 
   const nombres = fd.getAll('socio_nombre');
@@ -135,6 +136,7 @@ function recolectarDatos(form, folio){
     folio,
     estado: 'pendiente',
     empresa,
+    representanteLegal: fd.get('representanteLegal') || '',
     socios,
     contacto
   };
@@ -145,12 +147,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('btnAddSocio').addEventListener('click', agregarSocio);
 
-  // chips visuales para tipo de sociedad
-  document.querySelectorAll('#tipoSociedadRow .radio-chip').forEach(chip => {
+  // chips visuales: tenencia del domicilio
+  document.querySelectorAll('#tenenciaRow .radio-chip').forEach(chip => {
     const input = chip.querySelector('input');
     input.addEventListener('change', () => {
-      document.querySelectorAll('#tipoSociedadRow .radio-chip').forEach(c => c.classList.remove('checked'));
+      document.querySelectorAll('#tenenciaRow .radio-chip').forEach(c => c.classList.remove('checked'));
       chip.classList.add('checked');
+    });
+  });
+
+  // chips visuales + mostrar/ocultar "desde cuándo"
+  document.querySelectorAll('#yaEjerceRow .radio-chip').forEach(chip => {
+    const input = chip.querySelector('input');
+    input.addEventListener('change', () => {
+      document.querySelectorAll('#yaEjerceRow .radio-chip').forEach(c => c.classList.remove('checked'));
+      chip.classList.add('checked');
+      document.getElementById('desdeCuandoField').style.display = input.value === 'si' ? 'block' : 'none';
     });
   });
 

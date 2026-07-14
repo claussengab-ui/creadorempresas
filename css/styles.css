@@ -5,13 +5,13 @@
    ============================================================ */
 
 :root{
-  --ink:        #16213A;   /* texto principal, azul tinta */
-  --ink-soft:   #3C4A6B;   /* texto secundario */
-  --paper:      #F1EEE3;   /* fondo general */
+  --ink:        #2E1A47;   /* texto principal, morado tinta */
+  --ink-soft:   #5C4380;   /* texto secundario */
+  --paper:      #F5F0FA;   /* fondo general, lavanda pálido */
   --paper-raised:#FFFFFF;  /* tarjetas */
-  --line:       #D9D3C1;   /* bordes suaves */
-  --gold:       #B98A2E;   /* acento, tinta de timbre */
-  --gold-soft:  #EADFC3;
+  --line:       #E1D4F0;   /* bordes suaves, lila */
+  --gold:       #7C3AED;   /* acento principal, violeta */
+  --gold-soft:  #ECE1FB;
   --teal:       #2F6E62;   /* estado positivo */
   --teal-soft:  #DCEAE6;
   --brick:      #A5402F;   /* estado / alerta */
@@ -40,8 +40,8 @@ body{
 /* subtle paper texture via layered radial noise, no external asset */
 body{
   background-image:
-    radial-gradient(circle at 20% 10%, rgba(185,138,46,0.05), transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(47,110,98,0.05), transparent 40%);
+    radial-gradient(circle at 20% 10%, rgba(124,58,237,0.06), transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(92,67,128,0.06), transparent 40%);
 }
 
 a{color:var(--gold); text-decoration:none;}
@@ -346,20 +346,20 @@ textarea{ resize:vertical; min-height:80px; }
 .stamp{
   width:150px;height:150px;
   margin:0 auto 26px;
-  border:3px solid var(--teal);
+  border:3px solid var(--gold);
   border-radius:50%;
   display:flex;
   align-items:center;
   justify-content:center;
   transform:rotate(-9deg);
   position:relative;
-  color:var(--teal);
+  color:var(--gold);
 }
 .stamp::before{
   content:'';
   position:absolute;
   inset:10px;
-  border:1px dashed var(--teal);
+  border:1px dashed var(--gold);
   border-radius:50%;
 }
 .stamp span{

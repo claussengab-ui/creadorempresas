@@ -23,8 +23,6 @@
 
       <section class="hero" id="heroBlock">
         <span class="folio-tag">📄 Formulario de ingreso</span>
-        <h1>Cuéntanos de tu empresa y nos encargamos del resto</h1>
-        <p>Completa estos datos y tu contadora los revisará para constituir tu empresa en la plataforma Tu Empresa en un Día e iniciar actividades ante el SII. Tómate tu tiempo, puedes tener los documentos de tus socios a la mano.</p>
       </section>
 
       <form id="clienteForm" novalidate>
@@ -40,20 +38,9 @@
           </div>
 
           <div class="field-grid">
-            <div class="field field--full">
-              <label>Tipo de sociedad</label>
-              <div class="radio-row" id="tipoSociedadRow">
-                <label class="radio-chip"><input type="radio" name="tipoSociedad" value="SpA" required> SpA</label>
-                <label class="radio-chip"><input type="radio" name="tipoSociedad" value="EIRL"> EIRL</label>
-                <label class="radio-chip"><input type="radio" name="tipoSociedad" value="SRL"> SRL (Ltda.)</label>
-                <label class="radio-chip"><input type="radio" name="tipoSociedad" value="SA"> S.A.</label>
-                <label class="radio-chip"><input type="radio" name="tipoSociedad" value="No sé"> No sé cuál me conviene</label>
-              </div>
-            </div>
-
             <div class="field">
-              <label>Nombre / razón social</label>
-              <input type="text" name="nombreEmpresa" required placeholder="Ej: Comercializadora Sur SpA">
+              <label>¿Qué nombre quieres ponerle a tu empresa?</label>
+              <input type="text" name="nombreEmpresa" required placeholder="Ej: Comercializadora Sur">
             </div>
             <div class="field">
               <label>Nombre de fantasía <span class="opt">(opcional)</span></label>
@@ -61,14 +48,38 @@
             </div>
 
             <div class="field field--full">
-              <label>Giro o actividad económica</label>
-              <input type="text" name="giro" required placeholder="Ej: Venta al por mayor de productos agrícolas">
-              <p class="hint">Describe a qué se dedicará tu empresa, lo más específico posible.</p>
+              <label>¿Qué quieres hacer con tu empresa?</label>
+              <textarea name="giro" required placeholder="Ej: Quiero vender huevos de campo&#10;Ej: Quiero hacer transporte de carga&#10;Ej: Quiero vender ropa por internet"></textarea>
+              <p class="hint">Cuéntanoslo con tus palabras, como si le explicaras a un amigo a qué se va a dedicar tu negocio.</p>
             </div>
 
             <div class="field field--full">
-              <label>Domicilio tributario (dirección de la empresa)</label>
+              <label>¿Ya estás trabajando en esto o recién vas a empezar?</label>
+              <div class="radio-row" id="yaEjerceRow">
+                <label class="radio-chip"><input type="radio" name="yaEjerce" value="si" required> Ya estoy vendiendo / trabajando en esto</label>
+                <label class="radio-chip"><input type="radio" name="yaEjerce" value="no"> Todavía no, voy a empezar</label>
+              </div>
+              <p class="hint">Esto nos ayuda a saber desde cuándo declarar tus actividades ante el SII.</p>
+            </div>
+
+            <div class="field field--full" id="desdeCuandoField" style="display:none;">
+              <label>¿Desde cuándo? <span class="opt">(aproximado)</span></label>
+              <input type="text" name="desdeCuando" placeholder="Ej: Desde marzo de 2026, o hace como 6 meses">
+            </div>
+
+            <div class="field field--full">
+              <label>Dirección de la empresa</label>
               <input type="text" name="domicilio" required placeholder="Calle, número, comuna, ciudad">
+            </div>
+
+            <div class="field field--full">
+              <label>Esa dirección, ¿es arrendada o propia?</label>
+              <div class="radio-row" id="tenenciaRow">
+                <label class="radio-chip"><input type="radio" name="tenenciaDomicilio" value="arrendada" required> Arrendada</label>
+                <label class="radio-chip"><input type="radio" name="tenenciaDomicilio" value="propia"> Propia</label>
+                <label class="radio-chip"><input type="radio" name="tenenciaDomicilio" value="no_se"> No lo sé todavía</label>
+              </div>
+              <p class="hint">Esto nos sirve para saber qué documento vamos a necesitar más adelante (contrato de arriendo o escritura).</p>
             </div>
 
             <div class="field">
@@ -102,16 +113,6 @@
                 <option value="talvez">No lo sé todavía</option>
               </select>
             </div>
-
-            <div class="field field--full">
-              <label>Régimen tributario de preferencia <span class="opt">(si no sabes, tu contadora te asesora)</span></label>
-              <select name="regimenTributario">
-                <option value="asesoria">Que me asesoren, no sé cuál conviene</option>
-                <option value="pro_pyme_general">Pro Pyme General</option>
-                <option value="pro_pyme_transparente">Pro Pyme Transparente</option>
-                <option value="semi_integrado">Semi Integrado</option>
-              </select>
-            </div>
           </div>
         </div>
 
@@ -127,6 +128,12 @@
 
           <div id="sociosContainer"></div>
           <button type="button" class="btn-add" id="btnAddSocio">+ Agregar socio</button>
+
+          <div class="field field--full" style="margin-top:20px;">
+            <label>¿Quién será el representante legal de la empresa?</label>
+            <input type="text" name="representanteLegal" required placeholder="Escribe el nombre de uno de los socios de arriba">
+            <p class="hint">El representante legal es la persona que firma a nombre de la empresa: hace el inicio de actividades ante el SII, abre la cuenta bancaria, y firma contratos. Si son varios socios, deben decidir juntos quién cumplirá este rol (puede ser más de una persona).</p>
+          </div>
         </div>
 
         <!-- 3. Contacto -->
